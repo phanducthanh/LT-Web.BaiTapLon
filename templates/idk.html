@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+</head>
+<body>
+<p>Script</p>
+<textarea rows="25" cols="50" id="script" name="script" placeholder="Enter your code here"></textarea>
+<p>stdin</p>
+<input type="text" id="stdin" name="stdin" placeholder="stdin">
+<p>language</p>
+<input type="text" id="language" name="language" placeholder="language">
+<p>versionIndex</p>
+<input type="text" id="versionIndex" name="versionIndex" placeholder="versionIndex">
+<button>Click</button>
+<div class="result"></div>
+<script>
+    $(document).ready(function () {
+        $("button").click(function () {
+            var script = $.trim($("#script").val());
+            var stdin = $('input[id="stdin"]').val();
+            var language = $('input[id="language"]').val();
+            var versionIndex = $('input[id="versionIndex"]').val();
+            var data = {
+                script: script,
+                stdin: stdin,
+                language: language,
+                versionIndex: versionIndex
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/api/execute',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(response)
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
