@@ -1,11 +1,14 @@
 import os
-import sqlite3
 import json
 from flask import Flask, render_template, request, redirect
-from flask_login import LoginManager, login_required, login_user, current_user
+from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 import services.api_execute
 from models.User import User
+from models.Language import Language
+from models.Question import Question
+from models.QuestionLevel import QuestionLevel
 import db
+import mysql.connector
 
 
 app = Flask(__name__)
@@ -28,9 +31,41 @@ def unauthorized_handler():
     return redirect('/login')
 
 
+@app.route('/language', strict_slashes=False)
+@app.route('/language/<language_name>', strict_slashes=False)
+@app.route('/language/<language_name>/<question_id>', strict_slashes=False)
+def language(language_name=None, question_id=None):
+    languages_link = db.get_list_languages()
+    if language_name in languages_link:
+        questions = []
+        if question_id:
+            return 'Thanh Dat'
+        for question_data in db.get_questions_by_language_name(language_name):
+            question = Question(*question_data)
+            question.score = db.get_level_by_name(question.level)[2]
+            questions.append(question)
+        return render_template('language_challenges.html',
+                               title=language_name,
+                               questions=questions)
+    return redirect('/dashboard')
+
+
+@app.route('/dashboard')
+# @login_required
+def dashboard():
+    languages_data = db.get_languages()  # list of languages data
+    languages = []  # save instances of Language
+    for language_data in languages_data:
+        language = Language(language_data[0], language_data[1], language_data[2])
+        languages.append(language)
+    return render_template('dashboard.html', languages=languages)
+
+
 # Homepage
 @app.route('/')
 def home_page():
+    if current_user.is_authenticated:
+        return redirect('/dashboard')
     return 'This is homepage!'
 
 
@@ -59,6 +94,14 @@ def login():
     return render_template('login.html')
 
 
+# Log out
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return "<h1>Logged out</h1>"
+
+
 # Sign up page
 @app.route('/sign-up', methods=["GET", "POST"], strict_slashes=False)
 def sign_up():
@@ -68,14 +111,17 @@ def sign_up():
         password = request.form['password']
         try:
             db.add_user(email, username, password)
-        except sqlite3.IntegrityError:
-            return "Username is exist!"
-        return "New user added!"
+        except mysql.connector.errors.IntegrityError:  # duplicate entry
+            return "Username or email is exist!"
+        return redirect('login')
+    if current_user.is_authenticated:
+        return redirect('/')
     return render_template('sign-up.html')
 
 
 # API to run code
 @app.route('/api/execute', methods=["POST"], strict_slashes=False)
+@login_required
 def execute():
     data = request.get_json()
     script = data['script']

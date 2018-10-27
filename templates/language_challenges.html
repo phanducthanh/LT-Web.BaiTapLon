@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>{{ title }}</title>
+{% endblock head %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+    {% for question in questions %}
+        <a href="{{ title }}/{{ question.question_id }}">{{ question.question_name }}</a>
+        <p>Level: {{ question.level }} | Score: {{ question.score }}</p>
+    {% endfor %}
+{% endblock content %}

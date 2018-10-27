@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Dashboard</title>
+{% endblock head %}
+
+{% block content %}
+    <h1>Hi there!!!</h1>
+    {% for language in languages %}
+        <a href="/language/{{ language.language_name }}">{{ language.language_name }}</a><br />
+        <p>{{ language.language_describe }}</p>
+    {% endfor %}
+{% endblock content %}
