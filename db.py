@@ -1,6 +1,24 @@
 import mysql.connector
 
 
+def get_question_by_id(question_id):
+    cnx = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        passwd="140397",
+        database="ltw",
+        buffered=True
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT * FROM question WHERE question_id = %s', (question_id,)
+    )
+    fetched = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+    return fetched
+
+
 def get_level_by_name(level_name):
     cnx = mysql.connector.connect(
         host="127.0.0.1",
@@ -12,6 +30,62 @@ def get_level_by_name(level_name):
     cursor = cnx.cursor()
     cursor.execute(
         'SELECT * FROM questionlevel WHERE level_name = %s', (level_name,)
+    )
+    fetched = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+    return fetched
+
+
+def add_to_userquestion(user_id, question_id, test_status, test_submit):
+    cnx = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        passwd="140397",
+        database="ltw",
+        buffered=True
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'INSERT INTO userquestion (user_id, question_id, test_status, test_submit)'
+        'VALUE (%s, %s, %s, %s)',
+        (user_id, question_id, test_status, test_submit,)
+    )
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+
+def update_userquestion(user_id, question_id, test_status, test_submit):
+    cnx = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        passwd="140397",
+        database="ltw",
+        buffered=True
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'UPDATE userquestion SET test_status = %s, test_submit = %s WHERE user_id = %s AND question_id = %s',
+        (test_status, test_submit, user_id, question_id)
+    )
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+
+def get_userquestion(user_id, question_id):
+    cnx = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        passwd="140397",
+        database="ltw",
+        buffered=True
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT * FROM userquestion WHERE user_id = %s AND question_id = %s',
+        (user_id, question_id)
     )
     fetched = cursor.fetchone()
     cursor.close()
@@ -39,13 +113,13 @@ def get_questions_by_language_name(language_name):
     fetched = cursor.fetchone()
     language_id = fetched[0]
     cursor.execute(
-        'SELECT question_id, question_name, question_content, level_name, language_name, question_input, question_result FROM question, questionlevel, language WHERE question.language_id = %s AND question.level_id = question.level_id GROUP BY question_id',
+        'SELECT * FROM question, questionlevel, language WHERE question.language_id = %s AND question.language_id = language.language_id',
         (language_id,)
     )
-    questions = cursor.fetchall()
+    data = cursor.fetchall()
     cursor.close()
     cnx.close()
-    return questions
+    return data
 
 
 def get_list_languages():

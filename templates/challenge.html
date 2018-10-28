@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>{{ question.question_name }} | {{ question.question_language }}</title>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock head %}
+
+{% block content %}
+    <h1>{{ question.question_name }}</h1>
+    <p>{{ question.question_content }}</p>
+    <p>Script</p>
+    {% if test_submit is not none %}
+        <p>Last commit</p>
+        <pre><code>{{ test_submit }}</code></pre>
+    {% endif %}
+    <textarea rows="25" cols="50" id="script" name="script"
+              placeholder="Enter your code here"></textarea>
+    <button>Click</button>
+    <div class="result"></div>
+    <script>
+        $(document).ready(function () {
+            $("button").click(function () {
+                var script = $.trim($("#script").val());
+                var question_id = {{ question.question_id }};
+                var data = {
+                    script: script,
+                    question_id: question_id,
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/execute',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.message === "Success!") {
+                            $('.result').html('<b>' + response.message + '</b>')
+                        }
+                        else {
+                            $('.result').html('<b>' + response.message + '</b><br><b>Output</b>:' + response.output.replace(/\n/g, "<br />"))
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock content %}

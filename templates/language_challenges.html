@@ -8,6 +8,6 @@
 <h1>{{ title }}</h1>
     {% for question in questions %}
         <a href="{{ title }}/{{ question.question_id }}">{{ question.question_name }}</a>
-        <p>Level: {{ question.level }} | Score: {{ question.score }}</p>
+        <p>Level: {{ question.question_level }} | Score: {{ question.question_score }}</p>
     {% endfor %}
 {% endblock content %}

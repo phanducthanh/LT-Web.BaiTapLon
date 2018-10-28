@@ -5,7 +5,8 @@
 {% endblock head %}
 
 {% block content %}
-    <h1>Hi there!!!</h1>
+    <h1>Hi {{ user.username }}!!!</h1>
+    <h2>You have {{ user.score }}</h2>
     {% for language in languages %}
         <a href="/language/{{ language.language_name }}">{{ language.language_name }}</a><br />
         <p>{{ language.language_describe }}</p>
