@@ -141,15 +141,16 @@ def execute():
     script = data['script']
     question_id = data['question_id']
     question = Question(*db.get_question_by_id(question_id))  # get question's info
+    question.question_score = db.get_score_by_id(question.level_id)
     question_result = question.question_result.split("|")
     question_language = str()
     result = dict()
     if question.language_id == 1:  # to send to jdoodle API
         question_language = 'python3'
-        version_index = 2  # newest version of IDE
+        version_index = 2  # newest version of Python IDE
     elif question.language_id == 2:  # to send to jdoodle API
         question_language = 'java'
-        version_index = 3  # newest version of IDE
+        version_index = 2  # newest version of Java IDE
     if question.question_input:  # if question has input
         for _input in question.question_input.split('|'):
             stdin = _input.replace(',', '''
@@ -167,6 +168,8 @@ def execute():
                 else:
                     result['message'] = 'Error!'
                     break
+            else:
+                result['message'] = 'Error!'
     else:
         result = services.api_execute.compile_code(
             script=script,
@@ -191,9 +194,14 @@ def execute():
         userquestion = UserQuestion(*get_user_question)
         if userquestion.test_status == 1:  # in case test_submit = 1 but user runs code again and it is wrong
             test_status = 1
-        db.update_userquestion(current_user_id, question_id, test_status, script)
+        else:
+            if test_status == 1:
+                db.add_score(current_user_id, question.question_score)  # add score to user
+        db.update_userquestion(current_user_id, question_id, test_status, script)  # update test_status
     else:
-        db.add_to_userquestion(current_user_id, question_id, test_status, script)
+        db.add_to_userquestion(current_user_id, question_id, test_status, script)  # add to table userquestion
+        if test_status == 1:
+            db.add_score(current_user_id, question.question_score)  # add score to user
     return json.dumps(result)
 
 

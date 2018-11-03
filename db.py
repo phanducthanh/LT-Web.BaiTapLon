@@ -1,6 +1,46 @@
 import mysql.connector
 
 
+def get_score_by_id(level_id):
+    cnx = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        passwd="140397",
+        database="ltw",
+        buffered=True
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT level_score FROM questionlevel WHERE level_id = %s', (level_id,)
+    )
+    fetched = cursor.fetchone()[0]
+    cursor.close()
+    cnx.close()
+    return fetched
+
+
+def add_score(user_id, score):
+    cnx = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        passwd="140397",
+        database="ltw",
+        buffered=True
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT score FROM user WHERE id = %s', (user_id,)
+    )
+    current_score = cursor.fetchone()[0]
+    new_score = current_score + score
+    cursor.execute(
+        'UPDATE user SET score = %s WHERE id = %s', (new_score, user_id,)
+    )
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+
 def get_question_by_id(question_id):
     cnx = mysql.connector.connect(
         host="127.0.0.1",
