@@ -1,0 +1,400 @@
+body{
+	font-family: sans-serif;
+	padding:0;
+  	margin:0;
+}
+
+#login-logo{
+	width: auto;
+	height: auto;
+	text-align: center;
+	margin-top: 50px;
+}
+#header{
+	width: 100%;
+	height: 60px;
+	background-color: #39424E;
+}
+.container{
+	width: 1200px;
+	height: auto;
+	padding: 0;
+	margin:  auto;
+}
+#logo{
+	width: 60px;
+	height: 60px;
+	float: left;
+	margin-left: -10px;
+}
+#logo img {
+	display: block;
+	padding: 10px 0px;
+}
+#menu-top-left{
+	width: 630px;
+	height: 60px;
+	float: left;
+	font-size: 14px;
+	font-weight: 700;
+	
+}
+#menu-top-left ul{
+	height: 60px;
+	width: auto;
+	margin: 0;
+}
+#menu-top-left ul li {
+	list-style: none;
+	float: left;
+	width: 70px;
+	padding-right: 30px;
+
+}
+#menu-top-left ul li a{
+	text-decoration: none;
+	line-height: 60px;
+	color: #b7c9cc;
+}
+#menu-top-right{
+	width: 500px;
+	float: right;
+	height: 60px;
+	font-size: 14px;
+	font-weight: 700px;
+}
+#menu-top-right ul{
+	height: 60px;
+	width: auto;
+	margin: 0;
+	float: right;
+}
+#menu-top-right ul li{
+	list-style: none;
+	float: left;
+	width: auto;
+	padding-right:14px;
+	line-height: 60px;
+	position: relative;
+}
+#menu-top-right ul li a{
+	text-decoration: none;
+	line-height: 40px;
+	font-weight: bold;
+}
+.icon{
+	margin-top: 14px;
+}
+#menu-top-right  ul li input {
+	height: 30px;
+	color: #b7c9cc;
+	background: #39424E;
+	border: 1px solid #b7c9cc;
+}
+
+#page-label {
+	width: 100%;
+	height: 100px;
+}
+#page-label-left {
+	width: 80%;
+	float: left;
+	text-align: left;
+	text-align: left;
+}
+#page-label-left ul  {
+	width: 100%;
+	height: 100px;
+	margin: 0px;
+	padding: 0px;
+}
+#page-label-left ul li {
+	list-style-type: none;
+	padding-top: 5px;
+}
+#page-label-right {
+	width: 20%;
+	float: right;
+	text-align: right;
+}
+#page-label-right a{
+	text-decoration: none;
+	line-height: 100px;
+	color: #1ba94c;
+}
+#content{
+	background: #f3f7f7;
+	width:100%;
+	height: auto;
+	min-height: 500px;
+}
+
+#list-columns{
+	width: auto;
+	height: auto;
+
+}
+.title-block {
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 18px;
+	color: #738f93;
+	padding: 5px 25px;
+}
+.columns {
+    float: left;
+    width: 25%;
+    padding:25px 25px;
+    box-sizing: border-box;
+    
+}
+
+.columns-2 {
+    float: left;
+    width: 50%;
+    padding: 25px 20px;
+    box-sizing: border-box;
+    
+}
+
+.price {
+    list-style-type: none;
+    border: 1px solid #eee;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    background-color: #fff;
+}
+
+
+.price:hover {
+    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2)
+}
+
+.price .header {
+    background-color: #4DB1E2;
+    color: white;
+    font-size: 25px;
+}
+
+
+.price li {
+    border-bottom: 1px solid #eee;
+    padding: 20px;
+    text-align: center;
+}
+.button-price {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+}
+#price-head-1 {
+	background-color: #0077F7;
+}
+#price-head-2 {
+	background-color: #26A142;
+}
+#price-head-3 {
+	background-color: #DC3545;
+}
+#price-head-4 {
+	background-color: #FFC107;
+}
+@media only screen and (max-width: 600px) {
+    .columns {
+        width: 100%;
+    }
+}
+#footer{
+	width: 100%;
+	height: 50px;
+	background: #fff;
+}
+#footer ul{
+	width: 100%;
+	height: 50px;
+	margin: 0;
+	padding: 0;
+}
+#footer ul li {
+	list-style: none;
+	display: inline-table;
+	width: 100px;
+	line-height: 50px;
+}
+#footer ul li a{
+	text-decoration: none;
+	padding:0 12px;
+	color: #097bbf;
+}
+/*End file*/
+
+/*Begin file Login*/
+ .login-box {
+ 	width: 500px;
+ 	height: 500px;
+ 	margin: 0 auto;
+ 	padding: 0;
+ }
+ .title-form {
+ 	width: 100%;
+ 	text-align: center;
+ 	height: 60px;
+ 	line-height: 60px;
+ 	background: #fff;
+ 	border: none;
+ 	font-weight: bold;
+ 	border-top: 1px solid #ccc;
+ 	border-left: 1px solid #ccc;
+ 	border-right: 1px solid #ccc;
+ }
+  .title-form  a{
+  	text-decoration: none;
+  	color: black;
+  }
+  .content-form{
+	text-align: center;
+  	width: 100%;
+  	border: 1px solid #ccc;
+  	box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.05);
+  }
+ .content-form input{
+		width: 80%;
+		height: 40px;
+		margin-top: 25px;
+	
+ }
+ .text-center {
+ 	text-align: center;
+ }
+ #signup-btn{
+ 	margin-top: 20px;
+ 	margin-bottom: 20px;
+ }
+ #login-btn{
+ 	margin-top: 20px;
+ 	margin-bottom: 20px;
+ }
+ .btn{
+ 	border: none;
+    color: white;
+    width: 110px;
+    height: 40px;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+ }
+#btn-1{
+	background: #3B5998;
+}
+#btn-2{
+	background: #DD4B39;
+}
+#btn-3{
+	background: #0077B5;
+}
+/*End file login*/
+/*file challenge */
+/* Style the tab */
+#problem-content{
+	padding: 30px 0;
+}
+#problem{
+	padding: 20px 0;
+}
+.tab {
+    overflow: hidden;
+    
+}
+
+.tab button {
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    background-color: #F3F7F7;
+	color: #738f93;
+}
+
+.tab button:hover {
+    background-color: #fff;
+}
+.tab button.active {
+    background-color: #fff;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+    background: #fff;
+}
+
+#code-editor{
+	width: 100%;
+	margin-top: 20px;
+	height: auto;
+}
+#title-block {
+	width: 100%;
+	height: 60px;
+	border: 1px solid #ccc;
+	background: #F3F7F7;
+}
+select {
+	float: right;
+	width: 150px;
+	height: 40px;
+	margin-top: 10px;
+	margin-right: 10px;
+	font-weight: bold;
+	border:none;
+}
+option {
+	font-weight: bold;
+	border:none;
+	height: 40px;
+}
+#code-space{
+	width: 100%;
+
+}
+#code-space textarea{
+	width:99.7%;
+    height:600px;
+}
+.submenu {
+	display: none;
+	position:absolute;
+
+}
+.submenu ul li a {
+	color: black ;
+    cursor: pointer;
+    display: block;
+    padding: 0 10px;
+    width: 200px;
+}
+.submenu li {
+	width: 100px;					
+	margin-left: -50px !important;
+	padding: 0;
+}
+.submenu ul li{
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+	background: #fff;
+}
+#menu-top-right li:hover .submenu {
+ display: block;
+}

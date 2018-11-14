@@ -10,17 +10,35 @@
 {% endblock head %}
 
 {% block content %}
-    <h1>{{ question.question_name }}</h1>
-    <p>{{ question.question_content }}</p>
-    <p>Script</p>
-    {% if test_submit is not none %}
-        <p>Last commit</p>
-        <pre><code>{{ test_submit }}</code></pre>
-    {% endif %}
-    <textarea rows="25" cols="50" id="script" name="script"
-              placeholder="Enter your code here"></textarea>
-    <button>Click</button>
-    <div class="result"></div>
+    <div id="page-label">
+        <div class="container">
+            <div id="page-label-left">
+                <ul>
+                    <li><span class="big-title">
+						<h2>{{ question.question_name }}</h2>
+						</span>
+                    </li>
+                </ul>
+            </div>
+            <div id="page-label-right">
+                <a href="">Point : {{ question.question_score }}</a>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="container">
+            <p>{{ question.question_content }}</p>
+            <p>Script</p>
+            {% if test_submit is not none %}
+                <p>Last commit</p>
+                <pre><code>{{ test_submit }}</code></pre>
+            {% endif %}
+            <textarea rows="25" cols="50" id="script" name="script"
+                      placeholder="Enter your code here"></textarea>
+            <button>Click</button>
+            <div class="result"></div>
+        </div>
+    </div>
     <script>
         $(document).ready(function () {
             $("button").click(function () {

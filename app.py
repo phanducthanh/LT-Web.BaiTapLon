@@ -21,15 +21,23 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Login user
+    :param user_id:
+    :return: user
+    """
     user_data = db.get_user_by_id(user_id)
     if user_data:
-        user = User(user_data[0], user_data[1], user_data[2], user_data[3], user_data[4])
+        user = User(*user_data)
         return user
 
 
-# Redirect to login page if user is not logged in
 @login_manager.unauthorized_handler
 def unauthorized_handler():
+    """
+    Redirect to login page if guest access the page that requires login
+    :return: login page
+    """
     return redirect('/login')
 
 
@@ -85,10 +93,10 @@ def home_page():
     return 'This is homepage!'
 
 
-@app.route('/test', strict_slashes=False)
+@app.route('/profile', strict_slashes=False)
 @login_required
-def test():
-    return "Hi there!"
+def profile():
+    return render_template('profile.html')
 
 
 # Login page
@@ -98,11 +106,11 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user_data = db.get_user(email)
-        if user_data:
-            user = User(*user_data)
-            if password == user.password:
-                login_user(user, remember=False)
-                return redirect('/dashboard')
+        if user_data:  # check if user is in database
+            user = User(*user_data)  # create new user object
+            if password == user.password:  # check password
+                login_user(user)  # check password
+                return redirect('/dashboard')  # redirect to dashboard if login success
     if current_user.is_authenticated:  # check if user is logged in
         return redirect('/dashboard')
     return render_template('login.html')
