@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Purchase for answers</title>
+{% endblock head %}
+
+{% block content %}
+    <h2>Hi there!</h2>
+    <p>Do you want to buy this answer for {{ result.result_price }} points?</p>
+    <form action="/buy-answer/{{ result.question_id }}-{{ result.user_id }}" target="_blank">
+        <button type="submit" formmethod="post">Submit using POST</button>
+    </form>
+{% endblock content %}

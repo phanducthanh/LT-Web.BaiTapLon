@@ -7,7 +7,7 @@ import services.api_execute
 from models.User import User
 from models.Language import Language
 from models.Question import Question
-from models.QuestionLevel import QuestionLevel
+from models.Result import Result
 from models.UserQuestion import UserQuestion
 import db
 import mysql.connector
@@ -141,6 +141,119 @@ def sign_up():
     return render_template('sign-up.html')
 
 
+@app.route('/list-answer', strict_slashes=False)
+@app.route('/list-answer/<int:question_id>', strict_slashes=False)
+@login_required
+def list_answer(question_id=None):
+    if question_id:
+        results = list()
+        user_question = db.get_userquestion_by_question_id(question_id=question_id,
+                                                           current_id=current_user.id)
+        if user_question:
+            i = 0
+            for result in user_question:
+                result_user_id = result[0]
+                result_question_id = result[1]
+                result_test_status = result[2]
+                result_test_submit = result[3]
+                result_memory = result[4]
+                result_cpu_time = result[5]
+                result_price = db.get_score_by_question_id(question_id)
+                if i == 0:
+                    result_price *= 2.5
+                elif i == 1:
+                    result_price *= 2.0
+                elif i == 2:
+                    result_price *= 1.5
+                else:
+                    result_price *= 1.4
+                result = Result(result_user_id,
+                                result_question_id,
+                                result_test_status,
+                                result_test_submit,
+                                result_memory,
+                                result_cpu_time,
+                                int(result_price))
+                results.append(result)
+                i += 1
+        return render_template("list-answer.html", results=results)
+    return "No question_id found"
+
+
+@app.route('/purchased-items', strict_slashes=False)
+@login_required
+def purchased_items():
+    return "Hihi"
+
+
+@app.route('/buy-answer/<string:question_and_owner>', methods=["GET", "POST"], strict_slashes=False)
+@login_required
+def buy_answer(question_and_owner):
+    if request.method == "GET":
+        if question_and_owner:
+            data = question_and_owner.split("-")
+            question_id = int(data[0])
+            owner_id = int(data[1])
+
+            user_question = db.get_userquestion_by_question_id(question_id=question_id,
+                                                               current_id=current_user.id)
+            if user_question:
+                buy_price = db.get_score_by_question_id(question_id)
+                i = 0
+                for data in user_question:
+                    if owner_id == data[0] and question_id == data[1]:
+                        if i == 0:
+                            buy_price *= 2.5
+                        elif i == 1:
+                            buy_price *= 2.0
+                        elif i == 2:
+                            buy_price *= 1.5
+                        else:
+                            buy_price *= 1.4
+                        break
+                    i += 1
+                result = Result(data[0],
+                                data[1],
+                                data[2],
+                                data[3],
+                                data[4],
+                                data[5],
+                                int(buy_price))
+                return render_template('buy-answer.html', result=result)
+            else:
+                return "No result found!"
+    if request.method == "POST":
+        if question_and_owner:
+            data = question_and_owner.split("-")
+            question_id = int(data[0])
+            owner_id = int(data[1])
+
+            user_question = db.get_userquestion_by_question_id(question_id=question_id,
+                                                               current_id=current_user.id)
+            if user_question:
+                buy_price = db.get_score_by_question_id(question_id)
+                i = 0
+                for data in user_question:
+                    if owner_id == data[0] and question_id == data[1]:
+                        if i == 0:
+                            buy_price *= 2.5
+                        elif i == 1:
+                            buy_price *= 2.0
+                        elif i == 2:
+                            buy_price *= 1.5
+                        else:
+                            buy_price *= 1.4
+                        break
+                    i += 1
+                current_point = db.get_user_point(current_user.id)
+                if current_point - buy_price >= 0:
+                    db.minus_point_of_user(current_user.id, current_point - buy_price)
+                    return data[3].replace("\n", "<br>")
+                else:
+                    return "You don't have enough points!"
+
+
+
 # API to run code
 @app.route('/api/execute', methods=["POST"])
 @login_required
@@ -153,6 +266,7 @@ def execute():
     question_result = question.question_result.split("|")
     question_language = str()
     result = dict()
+    version_index = 0
     if question.language_id == 1:  # to send to jdoodle API
         question_language = 'python3'
         version_index = 2  # newest version of Python IDE
@@ -183,7 +297,7 @@ def execute():
             script=script,
             language=question_language,
             stdin=None,
-            version=2
+            version=version_index
         )
         if result['output']:  # check if output is null or not
             output = deepcopy(result)['output'].replace('\n', '')
@@ -198,6 +312,8 @@ def execute():
         test_status = 1
     current_user_id = int(current_user.get_id())  # get id of logged-in user
     get_user_question = db.get_userquestion(current_user_id, question_id)
+    memory = result['memory']  # memory that code uses
+    cpu_time = result['cpuTime']  # cpu time of code
     if get_user_question:  # if user solved this question before
         userquestion = UserQuestion(*get_user_question)
         if userquestion.test_status == 1:  # in case test_submit = 1 but user runs code again and it is wrong
@@ -205,9 +321,11 @@ def execute():
         else:
             if test_status == 1:
                 db.add_score(current_user_id, question.question_score)  # add score to user
-        db.update_userquestion(current_user_id, question_id, test_status, script)  # update test_status
+        db.update_userquestion(current_user_id, question_id, test_status,
+                               script, memory, cpu_time)  # update test_status
     else:
-        db.add_to_userquestion(current_user_id, question_id, test_status, script)  # add to table userquestion
+        db.add_to_userquestion(current_user_id, question_id, test_status,
+                               script, memory, cpu_time)  # add to table userquestion
         if test_status == 1:
             db.add_score(current_user_id, question.question_score)  # add score to user
     return json.dumps(result)

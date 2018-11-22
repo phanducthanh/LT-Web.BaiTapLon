@@ -1,13 +1,132 @@
 import mysql.connector
+from config import db_host, db_user, db_passwd, db_database, db_buffered
+
+
+def get_purchased_result(user_id):
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT * FROM purchasedresult WHERE user_id = %s', (user_id,)
+    )
+    fetched = cursor.fetchall()
+    if fetched:
+        for data in fetched:
+            cursor.execute(
+                'SELECT * FROM purchasedresult WHERE user_id = %s', (user_id,)
+            )
+    cursor.close()
+    cnx.close()
+    return
+
+
+def insert_into_purchased_result(user_id, question_id, owner_id):
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'INSERT INTO purchasedresult VALUES (%s, %s, %s)', (user_id, question_id, owner_id)
+    )
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+
+def minus_point_of_user(user_id, point):
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'UPDATE user SET score = %s WHERE id = %s', (point, user_id,)
+    )
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+
+def get_user_point(user_id):
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT score FROM user WHERE id = %s', (user_id,)
+    )
+    fetched = cursor.fetchone()[0]
+    cursor.close()
+    cnx.close()
+    return fetched
+
+
+def get_userquestion_by_question_id(question_id,
+                                    current_id,
+                                    order_by="memory",):
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT * FROM userquestion WHERE question_id = %s AND test_status = 1 AND user_id != %s ORDER BY %s',
+        (question_id, current_id, order_by)
+    )
+    fetched = cursor.fetchall()
+    cursor.close()
+    cnx.close()
+    return fetched
+
+
+def get_score_by_question_id(question_id):
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT level_id FROM question WHERE question_id = %s', (question_id,)
+    )
+    level_id = cursor.fetchone()[0]
+    cursor.execute(
+        'SELECT level_score FROM questionlevel WHERE level_id = %s', (level_id,)
+    )
+    fetched = cursor.fetchone()[0]
+    cursor.close()
+    cnx.close()
+    return fetched
 
 
 def get_score_by_id(level_id):
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -21,11 +140,11 @@ def get_score_by_id(level_id):
 
 def add_score(user_id, score):
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -43,11 +162,11 @@ def add_score(user_id, score):
 
 def get_question_by_id(question_id):
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -61,11 +180,11 @@ def get_question_by_id(question_id):
 
 def get_level_by_name(level_name):
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -77,37 +196,37 @@ def get_level_by_name(level_name):
     return fetched
 
 
-def add_to_userquestion(user_id, question_id, test_status, test_submit):
+def add_to_userquestion(user_id, question_id, test_status, test_submit, memory, cpu_time):
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
-        'INSERT INTO userquestion (user_id, question_id, test_status, test_submit)'
-        'VALUE (%s, %s, %s, %s)',
-        (user_id, question_id, test_status, test_submit,)
+        'INSERT INTO userquestion (user_id, question_id, test_status, test_submit, memory, cpuTime)'
+        'VALUE (%s, %s, %s, %s, %s, %s)',
+        (user_id, question_id, test_status, test_submit, memory, cpu_time)
     )
     cnx.commit()
     cursor.close()
     cnx.close()
 
 
-def update_userquestion(user_id, question_id, test_status, test_submit):
+def update_userquestion(user_id, question_id, test_status, test_submit, memory, cpu_time):
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
-        'UPDATE userquestion SET test_status = %s, test_submit = %s WHERE user_id = %s AND question_id = %s',
-        (test_status, test_submit, user_id, question_id)
+        'UPDATE userquestion SET test_status = %s, test_submit = %s, memory = %s, cpuTime = %s WHERE user_id = %s AND question_id = %s',
+        (test_status, test_submit, memory, cpu_time, user_id, question_id)
     )
     cnx.commit()
     cursor.close()
@@ -116,11 +235,11 @@ def update_userquestion(user_id, question_id, test_status, test_submit):
 
 def get_userquestion(user_id, question_id):
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -140,11 +259,11 @@ def get_questions_by_language_name(language_name):
     :return: questions data
     """
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -164,11 +283,11 @@ def get_questions_by_language_name(language_name):
 
 def get_list_languages():
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -187,11 +306,11 @@ def get_languages():
     :return: list of languages data
     """
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -212,11 +331,11 @@ def add_user(email, username, password):
     :return: None
     """
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -236,11 +355,11 @@ def get_user(email):
     :return: user's data or None
     """
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(
@@ -260,11 +379,11 @@ def get_user_by_id(user_id):
     :return: user's data or None
     """
     cnx = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        passwd="140397",
-        database="ltw",
-        buffered=True
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
     )
     cursor = cnx.cursor()
     cursor.execute(

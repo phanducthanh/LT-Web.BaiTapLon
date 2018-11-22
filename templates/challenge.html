@@ -27,6 +27,7 @@
     </div>
     <div id="content">
         <div class="container">
+        <p><a href="/list-answer/{{ question.question_id }}">Buy answer</a></p>
             <p>{{ question.question_content }}</p>
             <p>Script</p>
             {% if test_submit is not none %}
@@ -56,10 +57,10 @@
                     data: JSON.stringify(data),
                     success: function (response) {
                         if (response.message === "Success!") {
-                            $('.result').html('<b>' + response.message + '</b>')
+                            $('.result').html('<b>' + response.message + '</b><br><b>CPU Time</b>: ' + response.cpuTime + 's<br><b>Memory</b>: ' + response.memory)
                         }
                         else {
-                            $('.result').html('<b>' + response.message + '</b><br><b>Output</b>:' + response.output.replace(/\n/g, "<br />"))
+                            $('.result').html('<b>' + response.message + '</b><br><b>Output</b>: ' + response.output.replace(/\n/g, "<br>") + '<br><b>CPU Time</b>: ' + response.cpuTime + 's<br><b>Memory</b>: ' + response.memory)
                         }
                     },
                     error: function (error) {
