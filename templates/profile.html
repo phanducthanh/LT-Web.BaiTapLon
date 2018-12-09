@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ current_user.username }}</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block head %}
+    <title>{{ current_user.username }}'s profile</title>
+{% endblock head %}
+
+{% block content %}
+    <h2>Hi {{ current_user.username }}</h2>
+    <div>
+    <p>Your email: {{ current_user.email }}</p>
+    <p>Your point: {{ current_user.score }}</p>
+    <a href="/change-password">Change password</a>
+    </div>
+{% endblock content %}

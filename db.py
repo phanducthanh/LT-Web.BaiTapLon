@@ -2,6 +2,24 @@ import mysql.connector
 from config import db_host, db_user, db_passwd, db_database, db_buffered
 
 
+def leader_board():
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT * FROM user ORDER BY score DESC'
+    )
+    fetched = cursor.fetchall()
+    cursor.close()
+    cnx.close()
+    return fetched
+
+
 def get_purchased_result(user_id):
     cnx = mysql.connector.connect(
         host=db_host,
@@ -364,6 +382,24 @@ def get_user(email):
     cursor = cnx.cursor()
     cursor.execute(
         'SELECT * FROM user where email = %s', (email,)
+    )
+    fetched = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+    return fetched
+
+
+def get_user_info_by_id(user_id):
+    cnx = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        passwd=db_passwd,
+        database=db_database,
+        buffered=db_buffered
+    )
+    cursor = cnx.cursor()
+    cursor.execute(
+        'SELECT email, username, score FROM user where id= %s', (user_id,)
     )
     fetched = cursor.fetchone()
     cursor.close()

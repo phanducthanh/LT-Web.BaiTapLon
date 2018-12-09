@@ -41,6 +41,16 @@ def unauthorized_handler():
     return redirect('/login')
 
 
+@app.route('/leaderboard', strict_slashes=False)
+@login_required
+def leader_board():
+    users_from_db = db.leader_board()
+    users = []
+    for user_data in users_from_db:
+        users.append(User(*user_data))
+    return render_template('leaderboard.html', users=enumerate(users))
+
+
 @app.route('/language', strict_slashes=False)
 @app.route('/language/<language_name>', strict_slashes=False)
 @app.route('/language/<language_name>/<int:question_id>', strict_slashes=False)
@@ -251,7 +261,6 @@ def buy_answer(question_and_owner):
                     return data[3].replace("\n", "<br>")
                 else:
                     return "You don't have enough points!"
-
 
 
 # API to run code
