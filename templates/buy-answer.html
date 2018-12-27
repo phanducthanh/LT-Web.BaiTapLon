@@ -2,12 +2,43 @@
 
 {% block head %}
     <title>Purchase for answers</title>
+    <style type="text/css">
+    	.btn-start {
+              background-color: #4CAF50;
+              border: none;
+              color: white;
+              top: 100px;
+              padding: 11px 25px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+              
+}
+@media screen and (max-width: 1180px){
+h1{ 
+        position: relative;
+        left:   240px;
+    }
+  }
+
+    @media screen and (max-width: 848px){
+    h1{ 
+        position:static !important;
+    }
+  }
+    </style>
+  
 {% endblock head %}
 
 {% block content %}
-    <h2>Hi there!</h2>
-    <p>Do you want to buy this answer for {{ result.result_price }} points?</p>
+    
+    <h1 align="center">Do you want to buy this answer for {{ result.result_price }} points?</h1>
+    <div align="center">
     <form action="/buy-answer/{{ result.question_id }}-{{ result.user_id }}" target="_blank">
-        <button type="submit" formmethod="post">Submit using POST</button>
+        <button class="btn-start" type="submit" formmethod="post">BUY</button>
     </form>
+    </div>
 {% endblock content %}

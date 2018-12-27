@@ -2,13 +2,47 @@
 
 {% block head %}
     <title>Leaderboard</title>
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.title-block{
+	background-color: white;
+}
+</style>
 {% endblock head %}
 
 {% block content %}
-    <h2>Leaderboard</h2>
+	<div class="title-block">
+		<p>Leader Board</p>
+	</div>
+    <table>
+  <tr>
+    <th>Name</th>
+    <th>Rank</th>
+    <th>Score</th>
+  </tr>
     <div>
     {% for index, user in users %}
-        <p>{{ index + 1 }}. {{ user.username }} - {{ user.score }}</p>
+    <tr>
+    	<td>{{ user.username }}</td>
+    	<td>{{ index + 1 }}</td>
+    	<td>{{ user.score }}</td>
+        
+     </tr>
     {% endfor %}
     </div>
 {% endblock content %}

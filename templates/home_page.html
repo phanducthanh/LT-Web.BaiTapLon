@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Homepage | HackerRank</title>
+    <meta charset="UTF-8">
+    <style type="text/css">
+    	.demo-font{
+    		font-family: sans-serif;
+    	}
+
+    	.button {
+			  background-color: #4CAF50;
+			  border: none;
+			  color: white;
+			  top: 100px;
+			  padding: 15px 32px;
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-size: 16px;
+			  margin: 4px 2px;
+			  cursor: pointer;
+			  position: relative;
+}
+
+.button:hover{
+	box-shadow: 2px 2px 2px 2px #E0F7F7;
+}
+
+
+
+    </style>
+    <link rel="shortcut icon" href="../static/images/logo2.svg">
+
+</head>
+
+<body>
+<img src="{{ url_for('static', filename='images/login-logo.png') }}" width="200px" height="60px">
+<div class="demo-font">
+	<div class="contain">
+<h1 align="center">Join over 5 million developers.</h1>
+<h2 align="center">Practice coding, prepare for interviews, and get hired.</h2>
+</div>
+
+<div align="center"  >
+	<a href="/login" class="button">Login</a>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,12 +1,58 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>Dashboard</title>
+    <title>Dashboard | HackerRank</title>
+    <style type="text/css">
+
+    	.content{
+    		background-color: #F3F7F7;
+    	}
+    	.title-block{
+    		background-color: white;
+    	}
+
+
+    	.header a{
+    		text-decoration: none;
+    	}
+
+    	.btn-start {
+              background-color: #4CAF50;
+              border: none;
+              color: white;
+              top: 100px;
+              padding: 11px 25px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+              
+}
+				
+			.option a{
+				text-decoration: none;
+			}
+
+			.option a:hover{
+				color: #4CAF50;
+			}
+
+@media screen and (max-width: 768px){
+    .columns-2{ width: 100%; float: none;}
+    
+}
+
+
+
+    </style>
 {% endblock head %}
 
 {% block content %}
-	<div id="content">
-		<div class="container">
+<div class="content">
+	<div id="content" >
+		<div class="">
 			<div id="list-columns">
 					<div class="title-block">
 						<p>Choose your language</p>
@@ -16,10 +62,29 @@
                             <ul class="price">
                                 <li class="header"><a href="/language/{{ language.language_name }}">{{ language.language_name }}</a></li>
                                 <li>{{ language.language_describe }}</li>
+                                <li>Explore your skills with your favourite language and get so much fun with us</li>
+                                <li><a class="btn-start" href="/language/{{ language.language_name }}">Start</a></li>
                             </ul>
+                            
                         </div>
+
+                     
                     {% endfor %}
+
+                  
+                       <div class="columns-2">
+                       	<div class="option">
+
+                            <ul class="price" >
+                            	<li class="header">Other Option</li>
+                                <li><a href="/profile"><strong>Profile</strong></a></li>
+                                <li><a href="/leaderboard"><strong>Leader Board</strong></a></li>
+                                <li><a href="/logout"><strong>Log out</strong></a></li>
+                            </ul>
+                            </div>
+                        </div>
 			</div>
 		</div>
 	</div>
+</div>
 {% endblock content %}

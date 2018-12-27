@@ -2,12 +2,81 @@
 
 {% block head %}
     <title>{{ title }}</title>
+    <style type="text/css">
+    	.title-block{
+    		background-color: white;
+    	}
+
+    .price li{
+    	text-align: left;
+    }
+
+    .price li:hover{
+    	background-color: #F3F7F7;
+    	color: #4CAF50;
+    }
+
+    .price a{
+    	text-decoration: none;
+    }
+    .btn-start {
+              background-color: white;
+              border-color: #4CAF50;
+              border-style: solid;
+              border-width: 1px;
+              color: #4CAF50;
+              top: 100px;
+              padding: 11px 25px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+              position: relative;
+              top: 30px;
+              right: 50px;
+             
+              
+}
+
+    .columns-2{
+    	width: 80%;
+    }
+
+    @media screen and (max-width: 768px){
+    .btn-start{ display: none;}
+    
+}
+    </style>
 {% endblock head %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<div class="title-block">
+	<h1>{{ title }}</h1>
+
+</div>
+<div class="columns-2">
+                            <ul class="price">
     {% for question in questions %}
-        <a href="{{ title }}/{{ question.question_id }}">{{ question.question_name }}</a>
-        <p>Level: {{ question.question_level }} | Score: {{ question.question_score }}</p>
+   
+
+     
+                                <a class="" href="{{ title }}/{{ question.question_id }}">
+                                	
+                                <li><p style="float:right" class="btn-start" ">Slove Challenge</p>
+                                	<h3>{{ question.question_name }}</h3>
+                                	
+
+                                	 <p>Level: {{ question.question_level }} | Score: {{ question.question_score }}</p>
+                                	 
+                                	 
+                                </li>
+                                </a>
+                               
+                            
     {% endfor %}
+    </ul>
+                            
+                        </div>
 {% endblock content %}
