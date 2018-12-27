@@ -55,7 +55,9 @@ def leader_board():
 @app.route('/language/<language_name>', strict_slashes=False)
 @app.route('/language/<language_name>/<int:question_id>', strict_slashes=False)
 @login_required
+
 def language(language_name=None, question_id=None):
+    
     languages_link = db.get_list_languages()  # get all languages name in DB to check url
     if language_name in languages_link:  # if url is valid
         questions = []
@@ -100,7 +102,7 @@ def dashboard():
 def home_page():
     if current_user.is_authenticated:
         return redirect('/dashboard')
-    return 'This is homepage!'
+    return  render_template('home_page.html')
 
 
 @app.route('/profile', strict_slashes=False)
@@ -131,7 +133,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return "<h1>Logged out</h1>"
+    return  render_template('home_page.html')
 
 
 # Sign up page
@@ -258,7 +260,7 @@ def buy_answer(question_and_owner):
                 current_point = db.get_user_point(current_user.id)
                 if current_point - buy_price >= 0:
                     db.minus_point_of_user(current_user.id, current_point - buy_price)
-                    return data[3].replace("\n", "<br>")
+                    return "Answer: "+data[3].replace("\n", "<br>")
                 else:
                     return "You don't have enough points!"
 
